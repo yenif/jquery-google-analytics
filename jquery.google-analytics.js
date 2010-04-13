@@ -8,7 +8,8 @@
 *   - $.trackPage() - Adds Google Analytics tracking on the page from which
 *     it's called.
 *   - $.trackPageview() - Tracks a pageview using the given uri. Can be used for tracking Ajax requests: http://www.google.com/support/analytics/bin/answer.py?hl=en&answer=55519
-*   - $.trackUserValue() - Tracks a User Defined value using the given parameters.
+*   - $.setUserValue() - Tracks a User Defined value using the given parameters.
+*   - $.setCustomVar() - Tracks a Custom Variable using the given parameters.
 *   - $.trackEvent() - Tracks an event using the given parameters.
 *   - $('a').track() - Adds event tracking to element(s).
 *   - $.timePageLoad() - Measures the time it takes  an event using the given parameters.
@@ -158,11 +159,23 @@
    * Tracks a User Defined value
    *
    */
-  $.trackUserValue = function(value) {
+  $.setUserValue = function(value) {
     if(typeof pageTracker == 'undefined') {
       debug('FATAL: pageTracker is not defined');
     } else {
       pageTracker._setVar(value);
+    }
+  }
+  
+  /**
+   * Tracks a Custome Variable
+   *
+   */
+  $.setCustomVar = function(index, name, value, opt_scope) {
+    if(typeof pageTracker == 'undefined') {
+      debug('FATAL: pageTracker is not defined');
+    } else {
+      pageTracker._setCustomVar(index, name, value, opt_scope);
     }
   }
   
