@@ -139,6 +139,7 @@
     if(typeof pageTracker == 'undefined') {
       debug('FATAL: pageTracker is not defined'); // blocked by whatever
     } else {
+    	debug('Event: '+category+', '+action+', '+label+', '+value);
       pageTracker._trackEvent(category, action, label, value);
     }
   };
@@ -151,6 +152,7 @@
     if(typeof pageTracker == 'undefined') {
       debug('FATAL: pageTracker is not defined');
     } else {
+    	debug('PageView: '+uri);
       pageTracker._trackPageview(uri);
     }
   }
@@ -163,6 +165,7 @@
     if(typeof pageTracker == 'undefined') {
       debug('FATAL: pageTracker is not defined');
     } else {
+    	debug('UserValue: '+value);
       pageTracker._setVar(value);
     }
   }
@@ -175,6 +178,7 @@
     if(typeof pageTracker == 'undefined') {
       debug('FATAL: pageTracker is not defined');
     } else {
+    	debug('CustomVar: '+index+', '+name+', '+value+', '+opt_scope);
       pageTracker._setCustomVar(index, name, value, opt_scope);
     }
   }
