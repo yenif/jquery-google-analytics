@@ -77,7 +77,7 @@
     var script;
 
     // Use default options, if necessary
-    var settings = $.extend({}, {onload: true, status_code: 200}, options);
+    var settings = $.extend({}, {onload: true, status_code: 200, auto_trigger: true}, options);
     var src  = host + 'google-analytics.com/ga.js';
 
     function init_analytics() {
@@ -87,7 +87,9 @@
         pageTracker = _gat._getTracker(account_id);
 
         if(settings.status_code == null || settings.status_code == 200) {
-          pageTracker._trackPageview();
+          if(settings.auto_trigger) {
+            pageTracker._trackPageview();
+          }
         } else {
           debug('Tracking error ' + settings.status_code);
           pageTracker._trackPageview("/" + settings.status_code + ".html?page=" + document.location.pathname + document.location.search + "&from=" + document.referrer);
