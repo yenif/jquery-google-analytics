@@ -72,6 +72,7 @@
    *     - callback  - function to be executed after the Google Analytics code is laoded and initialized
    *
    */
+  var post_load_queue = []
   $.trackPage = function(account_id, options) {
     var host = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
     var script;
@@ -96,6 +97,9 @@
         }
         if($.isFunction(settings.callback)){
           settings.callback();
+        }
+        for(var i = 0; i < post_load_queue.length; i++){
+          post_load_queue[i]();
         }
       }
       else { 
@@ -137,7 +141,10 @@
    */
   $.trackEvent = function(category, action, label, value) {
     if(typeof pageTracker == 'undefined') {
-      debug('FATAL: pageTracker is not defined'); // blocked by whatever
+      debug('WARNING: pageTracker is not defined'); // blocked by whatever
+      post_load_queue.push(function(){
+        pageTracker._trackEvent(category, action, label, value);
+      });
     } else {
       pageTracker._trackEvent(category, action, label, value);
     }
@@ -149,7 +156,10 @@
    */
   $.trackPageview = function(uri) {
     if(typeof pageTracker == 'undefined') {
-      debug('FATAL: pageTracker is not defined');
+      debug('WARNING: pageTracker is not defined');
+      post_load_queue.push(function(){
+        pageTracker._trackPageview(uri);
+      });
     } else {
       pageTracker._trackPageview(uri);
     }
