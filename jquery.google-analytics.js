@@ -87,7 +87,7 @@
       if (typeof _gat != undefined) {
         debug('Google Analytics loaded');
 
-        pageTracker = _gat._getTracker(account_id);
+        pageTracker = _gat._createTracker(account_id);
 
         if(settings.status_code == null || settings.status_code == 200) {
           if(settings.auto_trigger) {
@@ -145,6 +145,7 @@
     if(typeof pageTracker == 'undefined') {
       debug('WARNING: pageTracker is not defined'); // blocked by whatever
       post_load_queue.push(function(){
+        debug('Event: '+category+', '+action+', '+label+', '+value);
         pageTracker._trackEvent(category, action, label, value);
       });
     } else {
@@ -161,6 +162,7 @@
     if(typeof pageTracker == 'undefined') {
       debug('WARNING: pageTracker is not defined');
       post_load_queue.push(function(){
+        debug('PageView: '+uri);
         pageTracker._trackPageview(uri);
       });
     } else {
@@ -175,7 +177,11 @@
    */
   $.setUserValue = function(value) {
     if(typeof pageTracker == 'undefined') {
-      debug('FATAL: pageTracker is not defined');
+      debug('WARNING: pageTracker is not defined');
+      post_load_queue.push(function(){
+        debug('UserValue: '+value);
+        pageTracker._setVar(value);
+      });
     } else {
     	debug('UserValue: '+value);
       pageTracker._setVar(value);
@@ -188,7 +194,11 @@
    */
   $.setCustomVar = function(index, name, value, opt_scope) {
     if(typeof pageTracker == 'undefined') {
-      debug('FATAL: pageTracker is not defined');
+      debug('WARNING: pageTracker is not defined');
+      post_load_queue.push(function(){
+        debug('CustomVar: '+index+', '+name+', '+value+', '+opt_scope);
+        pageTracker._setCustomVar(index, name, value, opt_scope);
+      });
     } else {
     	debug('CustomVar: '+index+', '+name+', '+value+', '+opt_scope);
       pageTracker._setCustomVar(index, name, value, opt_scope);
